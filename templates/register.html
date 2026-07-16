@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Đăng ký thành viên</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body style="display:flex; justify-content:center; align-items:center; height:100vh;">
+    <div class="modal-card" style="position:static; padding:24px; max-width:400px; width:100%">
+        <h2 style="margin-bottom:15px; text-align:center">📝 ĐĂNG KÝ USER MỚI</h2>
+        
+        {% if msg %}
+        <span style="font-size:0.85rem; color:var(--accent-warning); text-align:center; display:block; margin-bottom:10px;">
+            {{ msg }}
+        </span>
+        {% endif %}
+        
+        <form action="/auth/register" method="POST">
+            <div class="form-group">
+                <label class="form-label">Tên tài khoản</label>
+                <input type="text" name="username" class="form-input" required autocomplete="off">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Mật khẩu</label>
+                <input type="password" name="password" class="form-input" required>
+            </div>
+            
+            <!-- Thêm ô nhập ghi chú gửi đến Admin tại đây -->
+            <div class="form-group">
+                <label class="form-label">Lời nhắn gửi Admin (Tên thật, lý do...)</label>
+                <textarea name="note" class="form-textarea" rows="3" placeholder="Ví dụ: Nguyễn Văn A - Xin quyền quét Hub Vũng Tàu..."></textarea>
+            </div>
+            
+            <button type="submit" class="btn" style="background:var(--accent-secondary); color:#000;">Gửi Yêu Cầu Đăng Ký</button>
+        </form>
+        <p style="text-align:center; margin-top:15px; font-size:0.85rem; color:var(--text-secondary);">
+            Đã có tài khoản? <a href="/login" style="color:var(--accent-primary)">Quay lại đăng nhập</a>
+        </p>
+    </div>
+</body>
+</html>

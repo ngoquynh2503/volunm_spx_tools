@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPX Sorting Hub Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="icon" type="image/jpeg" href="images.jpg">
+    <script src="/static/app.js" defer></script>
+</head>
+<body>
+    <header class="header" id="app-header">
+        <div class="header-left">
+            <div class="header-logo">
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="40" height="40" rx="12" fill="url(#logo-gradient)"/>
+                    <path d="M12 28V16l8-5 8 5v12l-8 5-8-5z" stroke="#fff" stroke-width="1.5" stroke-linejoin="round" fill="none"/>
+                    <path d="M12 16l8 5 8-5" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/>
+                    <path d="M20 21v12" stroke="#fff" stroke-width="1.5"/>
+                    <defs>
+                        <linearGradient id="logo-gradient" x1="0" y1="0" x2="40" y2="40">
+                            <stop stop-color="#00d4aa"/><stop offset="1" stop-color="#0ea5e9"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+            <div class="header-title-group">
+                <h1 class="header-title">SPX Hub Dashboard</h1>
+                <span class="header-subtitle">Kho Phân Loại Hàng Hóa</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="status-indicator" id="status-indicator">
+                <span class="status-dot status-dot--online"></span>
+                <span class="status-text">Bấm Quét Để Xem</span>
+            </div>
+            <div class="last-updated" id="last-updated">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span id="last-updated-time">--:--:--</span>
+            </div>
+            <button class="header-btn" id="settings-btn" title="Cài đặt">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+            </button>
+            <button class="header-btn header-btn--refresh" id="refresh-btn" style="background: var(--accent-primary); color: #000; font-weight: bold;">
+                <span class="tab-icon">🚀</span> CHẠY QUÉT TAB NÀY
+            </button>
+            <a href="/auth/logout" class="header-btn" title="Đăng xuất" style="background: var(--accent-danger, #ef4444); color: #fff; font-weight: bold; text-decoration: none; display: flex; justify-content: center; align-items: center; gap: 8px; width: auto; height: 38px; padding: 0 16px; border-radius: var(--radius-full); white-space: nowrap;">
+                ĐĂNG XUẤT
+            </a>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="cookie-banner" id="cookie-banner" style="display: none;">
+            <div class="cookie-banner-text">
+                <strong>Chưa cấu hình phiên làm việc!</strong> Nhấp Cài đặt bên phải để điền Shopee Cookie.
+            </div>
+            <button class="cookie-banner-btn" id="cookie-banner-btn">Cài đặt ngay</button>
+        </div>
+
+        <section class="summary-cards" id="summary-cards">
+            <div class="stat-card stat-card--hubs" id="stat-hubs">
+                <div class="stat-card-content">
+                    <span class="stat-card-value" id="val-hubs">0</span>
+                    <span class="stat-card-label">Tổng số Hub khu vực</span>
+                </div>
+            </div>
+            <div class="stat-card stat-card--warehouse" id="stat-warehouse">
+                <div class="stat-card-content">
+                    <span class="stat-card-value" id="val-warehouse">0</span>
+                    <span class="stat-card-label">Tổng hàng trong kho</span>
+                </div>
+            </div>
+            <div class="stat-card stat-card--yard" id="stat-yard">
+                <div class="stat-card-content">
+                    <span class="stat-card-value" id="val-yard">0</span>
+                    <span class="stat-card-label">Tổng hàng ngoài bãi</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Thanh điều hướng Tab Khu vực (Bỏ tab tổng quan, load thẳng data tỉnh) -->
+        <nav class="tab-nav" id="tab-nav">
+            <button class="tab-btn tab-btn--active" data-tab="vung-tau">⚓ 60-Vũng Tàu</button>
+            <button class="tab-btn" data-tab="dong-nai">🦌 61-Đồng Nai</button>
+            <button class="tab-btn" data-tab="binh-duong">🏭 63-Bình Dương</button>
+            <button class="tab-btn" data-tab="binh-thuan">🏖️ 62-Bình Thuận</button>
+            <button class="tab-btn" data-tab="binh-phuoc">🌿 64-Bình Phước</button>
+            <button class="tab-btn" data-tab="tay-ninh">🏔️ 65-Tây Ninh</button>
+            <button class="tab-btn" data-tab="transit">🚚 Transit</button>
+            <button class="tab-btn" data-tab="central">🎯 Central</button>
+        </nav>
+
+        <div class="search-bar" id="search-bar">
+            <div class="search-input-wrapper">
+                <input type="text" class="search-input" id="search-input" placeholder="Tìm kiếm nhanh trạm...">
+            </div>
+        </div>
+
+        <section class="tab-content" id="tab-content">
+            <!-- Data đổ động tại đây -->
+        </section>
+    </main>
+
+    <!-- SETTINGS MODAL -->
+    <div class="modal-overlay" id="settings-modal" style="display: none;">
+        <div class="modal-backdrop" id="modal-backdrop"></div>
+        <div class="modal-card">
+            <div class="modal-header">
+                <h2 class="modal-title">⚙️ Cấu hình Cookie Hệ thống</h2>
+                <button class="modal-close" id="modal-close">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Shopee Authentication Cookie</label>
+                    <textarea id="cookie-input" class="form-textarea" rows="6" placeholder="SPC_CDS=...; SPC_ST=..."></textarea>
+                    <span class="form-hint" id="cookie-status-hint" style="color: var(--accent-primary); font-weight: bold; margin-top: 8px; display: block;">Trạng thái: Chưa có cookie trong trình duyệt</span>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px;">
+                    <button class="btn btn--primary" id="save-cookie-btn">Xác thực & Lưu Trình Duyệt</button>
+                    <button class="btn" id="delete-cookie-btn" style="background: var(--accent-danger); color: white; font-weight: bold;">Xóa Cookie Khỏi Máy</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toast-container"></div>
+    <div class="loading-overlay" id="loading-overlay" style="display: none;">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <p class="loading-text">Đang cào dữ liệu thời gian thực từ API Shopee Fleet...</p>
+        </div>
+    </div>
+</body>
+</html>

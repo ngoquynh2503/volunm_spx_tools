@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Đăng nhập - SPX System</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body style="display:flex; justify-content:center; align-items:center; height:100vh;">
+    <div class="modal-card" style="position:static; padding:24px; max-width:400px; width:100%">
+        <h2 style="margin-bottom:15px; text-align:center">🔐 ĐĂNG NHẬP HỆ THỐNG</h2>
+        
+        <!-- Sửa lại cú pháp thẻ thông báo lỗi chuẩn Jinja2 -->
+        {% if msg %}
+        <span style="font-size:0.85rem; color:var(--accent-danger); text-align:center; display:block; margin-bottom:10px;">
+            {{ msg }}
+        </span>
+        {% endif %}
+        
+        <form action="/auth/login" method="POST">
+            <div class="form-group">
+                <label class="form-label">Tài khoản</label>
+                <input type="text" name="username" class="form-input" required autocomplete="off">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Mật khẩu</label>
+                <input type="password" name="password" class="form-input" required>
+            </div>
+            <button type="submit" class="btn btn--primary">Đăng Nhập</button>
+        </form>
+        <p style="text-align:center; margin-top:15px; font-size:0.85rem; color:var(--text-secondary);">
+            Chưa có tài khoản? <a href="/register" style="color:var(--accent-primary)">Đăng ký ngay</a>
+        </p>
+    </div>
+</body>
+</html>

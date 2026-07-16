@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+aiohttp
+gspread
+oauth2client
+bcrypt
+jinja2
+python-multipart

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8"><title>Admin Approval Panel</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="main-content">
+    <header class="header">
+        <h1 class="header-title">🛡️ Hệ Thống Phê Duyệt Thành Viên (Admin: {{ admin_name }})</h1>
+        <a href="/auth/logout" class="header-btn header-btn--refresh" style="background:var(--accent-danger); color:white; text-decoration:none; line-height:38px; text-align:center">Đăng xuất</a>
+    </header>
+    <br>
+    <div class="table-wrapper">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Tên Tài Khoản</th>
+                    <th>Lời nhắn từ User</th> <!-- Cột hiển thị ghi chú mới bổ sung -->
+                    <th>Quyền Hạn</th>
+                    <th>Trạng Thái</th>
+                    <th style="text-align:center">Hành Động</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for u in users %}
+                {% if u.role != 'admin' %}
+                <tr>
+                    <td><b>{{ u.username }}</b></td>
+                    <!-- Render nội dung note của user -->
+                    <td style="color: var(--text-secondary); max-width: 250px; word-wrap: break-word;">
+                        <i>{{ u.note if u.note else "-" }}</i>
+                    </td>
+                    <td>User</td>
+                    <td>
+                        {% if u.status == 'approved' %}
+                            <span style="color:var(--accent-success)">🟢 Đã duyệt</span>
+                        {% elif u.status == 'rejected' %}
+                            <span style="color:var(--accent-danger)">🔴 Từ chối</span>
+                        {% else %}
+                            <span style="color:var(--accent-warning)">🟡 Chờ xử lý</span>
+                        {% endif %}
+                    </td>
+                    <td style="text-align:center">
+                        <button class="cookie-banner-btn" onclick="processUser('{{ u.username }}', 'approve')">Duyệt</button>
+                        <button class="cookie-banner-btn" style="background:var(--accent-danger)" onclick="processUser('{{ u.username }}', 'reject')">Từ chối</button>
+                    </td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script>
+        async function processUser(username, action) {
+            let res = await fetch(`/admin/${action}/${username}`, { method: 'POST' });
+            if(res.ok) { alert("Thực hiện thành công!"); location.reload(); }
+            else { alert("Lỗi hệ thống"); }
+        }
+    </script>
+</body>
+</html>
